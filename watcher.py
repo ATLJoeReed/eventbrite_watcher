@@ -17,7 +17,6 @@ class EventbriteWatcher(object):
         Args:
         __watch_time__: Amount of time to watch for the event.
         __organizer_id__: The ID of the organization to watch.
-                          NOTE: Switchyards = 6453217513
         __keyword__: Keyword to alert on.
         """
 
@@ -73,7 +72,7 @@ class EventbriteWatcher(object):
     def start_watching(self):
         results_found = 0
         end_time = self.get_end_time()
-        while results_found <= 3 and datetime.datetime.now() < end_time:
+        while results_found < 3 and datetime.datetime.now() < end_time:
             results = self.check_eventbrite()
             if results:
                 results_found += 1
