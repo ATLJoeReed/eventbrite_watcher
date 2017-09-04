@@ -1,3 +1,4 @@
+#!/usr/bin/python3.6
 import datetime
 import time
 
@@ -78,4 +79,4 @@ class EventbriteWatcher(object):
                 results_found += 1
             for result in results:
                 self.send_sms(result)
-            time.sleep(60)
+            time.sleep(600)
