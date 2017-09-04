@@ -6,9 +6,10 @@ from config import settings
 
 class EventbriteWatcher(object):
     """
-    This class is used to watch Eventbrite for new events at Switchyards.
+    This class is used to watch Eventbrite for new events at a specified
+    organization.
     """
-    def __init__(self, watch_time=240, organizer_id='6453217513', keyword='made'): # noqa
+    def __init__(self, watch_time, organizer_id, keyword):
         """
         Args:
         __watch_time__: Amount of time to watch for the event.
