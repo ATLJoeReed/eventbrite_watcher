@@ -23,6 +23,7 @@ class EventbriteWatcher(object):
         self.watch_time = watch_time
         self.organizer_id = organizer_id
         self.keyword = keyword
+        self.send_sms('Starting to watch...')
 
     def build_headers(self, oauth_token):
         token = "Bearer {}".format(oauth_token)
