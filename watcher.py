@@ -23,7 +23,6 @@ class EventbriteWatcher(object):
         self.watch_time = watch_time
         self.organizer_id = organizer_id
         self.keyword = keyword
-        self.send_sms('Starting to watch...')
 
     def build_headers(self, oauth_token):
         token = "Bearer {}".format(oauth_token)
@@ -70,6 +69,7 @@ class EventbriteWatcher(object):
         return response
 
     def start_watching(self):
+        self.send_sms('Starting to watch...')
         results_found = 0
         end_time = self.get_end_time(self.watch_time)
         while results_found < 3 and datetime.datetime.now() < end_time:
