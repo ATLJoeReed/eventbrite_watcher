@@ -31,8 +31,16 @@ class EventbriteWatcher(object):
     def build_payload(self, organizer_id):
         return {'organizer.id': organizer_id}
 
-    def check_eventbrite(self):
+    def check_events(self, events, keyword):
         results = []
+        for event in events:
+            event_name = event['name']['text']
+            event_url = event.get('url', None)
+            if keyword.lower() in event_name.lower():
+                results.append(event_url)
+        return results
+
+    def fetch_events(self):
         response = requests.get(
             settings.BASE_URL,
             headers=self.build_headers(settings.OAUTH_TOKEN),
@@ -40,16 +48,7 @@ class EventbriteWatcher(object):
             verify=True,
         )
         r = response.json()
-        events = r.get('events', None)
-        if not events:
-            self.send_sms('No events found...Please check!')
-            return None
-        for event in events:
-            event_name = event['name']['text']
-            event_url = event.get('url', None)
-            if self.keyword.lower() in event_name.lower():
-                results.append(event_url)
-        return results
+        return r.get('events', None)
 
     def get_end_time(self, watch_time):
         return datetime.datetime.now() + \
@@ -73,9 +72,13 @@ class EventbriteWatcher(object):
         results_found = 0
         end_time = self.get_end_time(self.watch_time)
         while results_found < 3 and datetime.datetime.now() < end_time:
-            results = self.check_eventbrite()
-            if results:
-                results_found += 1
-            for result in results:
-                self.send_sms(result)
+            events = self.fetch_events()
+            if not events:
+                self.send_sms('No events found...Please check!')
+            else:
+                results = self.check_events(events, self.keyword)
+                if results:
+                    results_found += 1
+                    for result in results:
+                        self.send_sms(result)
             time.sleep(300)
