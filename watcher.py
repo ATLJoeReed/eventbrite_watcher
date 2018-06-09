@@ -43,7 +43,7 @@ class EventbriteWatcher(object):
         events = r.get('events', None)
         if not events:
             self.send_sms('No events found...Please check!')
-            return None            
+            return None
         for event in events:
             event_name = event['name']['text']
             event_url = event.get('url', None)
