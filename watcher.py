@@ -42,6 +42,9 @@ class EventbriteWatcher(object):
         )
         r = response.json()
         events = r.get('events', None)
+        if not events:
+            self.send_sms('No events found...Please check!')
+            return None            
         for event in events:
             event_name = event['name']['text']
             event_url = event.get('url', None)
@@ -75,4 +78,4 @@ class EventbriteWatcher(object):
                 results_found += 1
             for result in results:
                 self.send_sms(result)
-            time.sleep(600)
+            time.sleep(300)
