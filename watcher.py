@@ -82,7 +82,7 @@ class EventbriteWatcher(object):
             events = self.fetch_events()
             if not events:
                 no_events_found += 1
-                if no_events_found >= 24:
+                if no_events_found > 24:
                     self.send_sms('No events found in past 2 hours...')
                     no_events_found = 0
             else:
