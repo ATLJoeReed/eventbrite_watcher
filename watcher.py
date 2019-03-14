@@ -47,6 +47,10 @@ class EventbriteWatcher(object):
             params=self.build_payload(self.organizer_id),
             verify=True,
         )
+        response_status_code = response.status_code
+        if response_status_code != 200:
+            self.send_sms(f'Bad response status code: {response_status_code}')
+            return None
         r = response.json()
         return r.get('events', None)
 
@@ -70,11 +74,15 @@ class EventbriteWatcher(object):
     def start_watching(self):
         self.send_sms('Starting to watch...')
         results_found = 0
+        no_events_found = 0
         end_time = self.get_end_time(self.watch_time)
         while results_found < 3 and datetime.datetime.now() < end_time:
             events = self.fetch_events()
             if not events:
-                self.send_sms('No events found...Please check!')
+                no_events_found += 1
+                if no_events_found >= 24:
+                    self.send_sms('No events found in past 2 hours...')
+                    no_events_found = 0
             else:
                 results = self.check_events(events, self.keyword)
                 if results:
