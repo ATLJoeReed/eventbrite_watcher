@@ -49,7 +49,9 @@ class EventbriteWatcher(object):
         )
         response_status_code = response.status_code
         if response_status_code != 200:
-            self.send_sms(f'Bad response status code: {response_status_code}')
+            self.send_sms(
+                'Bad response status code: {}'.format(response_status_code)
+            )
             return None
         r = response.json()
         return r.get('events', None)
