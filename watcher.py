@@ -45,7 +45,6 @@ class EventbriteWatcher(object):
             settings.BASE_URL,
             headers=self.build_headers(settings.OAUTH_TOKEN),
             params=self.build_payload(self.organizer_id),
-            verify=True,
         )
         response_status_code = response.status_code
         if response_status_code != 200:
